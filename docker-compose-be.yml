@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  backend:
+    image: nayeliherreraalbino/altavista-backend:4.0
+    container_name: springboot-app
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://localhost:1433;databaseName=AltavistaDB;encrypt=false;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=MiPassword123!
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: unless-stopped
+    networks:
+      - altavista-net
+
+networks:
+  altavista-net:
+    driver: bridge
