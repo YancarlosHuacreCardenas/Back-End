@@ -21,6 +21,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -80,6 +81,15 @@
     </dependencies>
 
     <build>
+        <!-- Asegura que todos los resources se lean como UTF-8 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <encoding>UTF-8</encoding>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Plugin de Spring Boot -->
             <plugin>
@@ -88,4 +98,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
