@@ -1,6 +1,6 @@
-package vg.yancarlos.huacre.hackathon.rest;
+package vg.yancarlos.huacre.hackathon.controller;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import vg.yancarlos.huacre.hackathon.model.Noticia;
 import vg.yancarlos.huacre.hackathon.service.NoticiaService;
@@ -9,28 +9,44 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/noticias")
-@RequiredArgsConstructor
+@CrossOrigin("*")
 public class NoticiaController {
 
-    private final NoticiaService service;
+    @Autowired
+    private NoticiaService noticiaService;
 
-    @PostMapping
-    public Noticia crear(@RequestBody Noticia noticia) {
-        return service.crearNoticia(noticia);
+    @GetMapping("/activas")
+    public List<Noticia> listarActivas() {
+        return noticiaService.listarActivas();
     }
 
-    @GetMapping
-    public List<Noticia> listar() {
-        return service.listarNoticias();
+    @GetMapping("/todas")
+    public List<Noticia> listarTodas() {
+        return noticiaService.listarTodas();
     }
 
     @GetMapping("/{id}")
-    public Noticia obtener(@PathVariable Long id) {
-        return service.obtenerNoticiaPorId(id);
+    public Noticia obtenerPorId(@PathVariable Integer id) {
+        return noticiaService.obtenerPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        service.eliminarNoticia(id);
+    @PostMapping
+    public Noticia crear(@RequestBody Noticia noticia) {
+        return noticiaService.crear(noticia);
+    }
+
+    @PutMapping("/{id}")
+    public Noticia actualizar(@PathVariable Integer id, @RequestBody Noticia noticia) {
+        return noticiaService.actualizar(id, noticia);
+    }
+
+    @PutMapping("/inactivar/{id}")
+    public void inactivar(@PathVariable Integer id) {
+        noticiaService.inactivar(id);
+    }
+
+    @PutMapping("/activar/{id}")
+    public void activar(@PathVariable Integer id) {
+        noticiaService.activar(id);
     }
 }

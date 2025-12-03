@@ -3,20 +3,27 @@ package vg.yancarlos.huacre.hackathon.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
-
-@Entity
-@Table(name = "noticia")
 @Data
+@Entity
+@Table(name = "Noticia") // nombre exacto de la tabla en SQL Server
 public class Noticia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
+    @Column(name = "titulo")
     private String titulo;
 
+    @Column(name = "contenido")
     private String contenido;
 
-    private LocalDate fecha;
+    @Column(name = "categoria")
+    private String categoria;
+
+    @Column(name = "autor")
+    private String autor;
+
+    @Column(name = "estado")
+    private boolean estado = true;
 }

@@ -1,20 +1,50 @@
 version: '3.8'
+
 services:
-  backend:
-    image: nayeliherreraalbino/altavista-backend:4.0
-    container_name: springboot-app
-    ports:
-      - "8081:8081"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
     environment:
-      - PORT=8081
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://localhost:1433;databaseName=AltavistaDB;encrypt=false;trustServerCertificate=true
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=MiPassword123!
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    restart: unless-stopped
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MiPassword123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
     networks:
-      - altavista-net
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Yancarlos1' -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-app
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=hackathon;encrypt=false
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=Yancarlos1
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-net
+    restart: on-failure
+
+volumes:
+  sqlserver-data:
 
 networks:
-  altavista-net:
+  backend-net:
     driver: bridge

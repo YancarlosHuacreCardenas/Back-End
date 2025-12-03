@@ -6,13 +6,17 @@ import java.util.List;
 
 public interface NoticiaService {
 
-    List<Noticia> listarNoticias();
+    List<Noticia> listarActivas();
 
-    Noticia obtenerNoticiaPorId(Long id);
+    List<Noticia> listarTodas();
 
-    Noticia crearNoticia(Noticia noticia);
+    Noticia obtenerPorId(Integer id);
 
-    Noticia actualizarNoticia(Long id, Noticia noticia);
+    Noticia crear(Noticia noticia);
 
-    void eliminarNoticia(Long id);
+    Noticia actualizar(Integer id, Noticia noticia);
+
+    void inactivar(Integer id);
+
+    void activar(Integer id);
 }
